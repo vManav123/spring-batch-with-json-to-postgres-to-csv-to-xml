@@ -1,4 +1,4 @@
-package com.vmanav123.batch.job.s3Operation;
+package com.vmanav123.batch.jobs.s3Operation;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -12,6 +12,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.time.LocalDate;
 
 @Service("s3Operation")
 @Slf4j
@@ -26,14 +27,10 @@ public class S3Operation {
 
     @SneakyThrows
     public String uploadFile(final File file) {
-        String fileName = file.getName()+ "_" + System.currentTimeMillis();
-        amazonS3.putObject(new PutObjectRequest(BUCKET_NAME, fileName, file));
-
-//        ClassLoader classLoader = getClass().getClassLoader();
-//        InputStream inputStream = classLoader.getResourceAsStream(TEMP_FILE_PATH+fileName);
-//        PutObjectRequest putObjectRequest = new PutObjectRequest(BUCKET_NAME,BUCKET_KEY,inputStream,null);
-//        amazonS3.putObject(putObjectRequest);
-        return "SuccessFully Uploaded : "+fileName+" ✔";
+        String[] fileName = file.getName().split("\\.");
+        String finalFileName = fileName[0] + "_" + LocalDate.now() + "." + fileName[1];
+        amazonS3.putObject(new PutObjectRequest(BUCKET_NAME, finalFileName, file));
+        return "SuccessFully Uploaded : " + finalFileName + " ✔";
     }
 
     public InputStreamResource downloadFile(String fileName) {

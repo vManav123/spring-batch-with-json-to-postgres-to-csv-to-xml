@@ -7,10 +7,11 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user")
 @AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 @Builder
+@ToString
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,4 +22,6 @@ public class UserEntity {
     private String phoneNumber;
     private String username;
     private String password;
+    @Transient
+    private String adultStatus;
 }
